@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cake Animation with Candle</title>
+  <link href="https://fonts.googleapis.com/css2?family=Tangerine:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(to right, #ffecd2 0%, #fcb69f 100%);
+      font-family: 'Tangerine', cursive;
+      overflow: hidden;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .hearts {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .heart {
+      position: absolute;
+      bottom: -50px;
+      width: 20px;
+      height: 20px;
+      background-color: rgb(226, 103, 123);
+      transform: rotate(-45deg);
+      animation: float 6s infinite ease-in;
+    }
+
+    .heart::before,
+    .heart::after {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: rgb(226, 103, 123);
+      border-radius: 50%;
+    }
+
+    .heart::before {
+      top: -10px;
+      left: 0;
+    }
+
+    .heart::after {
+      top: 0;
+      left: 10px;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0) rotate(-45deg); opacity: 1; }
+      100% { transform: translateY(-120vh) rotate(-45deg); opacity: 0; }
+    }
+
+    .container {
+      width: 90%;
+      max-width: 400px;
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 20px 45px rgba(120, 76, 10, 0.25);
+      position: relative;
+      padding: 50px 20px 30px;
+      z-index: 10;
+    }
+
+    .cake {
+      width: 100%;
+      position: relative;
+    }
+
+    .bottom-layer,
+    .top-layer,
+    .middle-layer {
+      height: 80px;
+      width: 240px;
+      position: relative;
+      margin: auto;
+      background-repeat: repeat;
+      background-size: 100% 100%, 60px 100px;
+      background-position: 28px 0;
+      background-image: linear-gradient(
+        transparent 50px,
+        #e3a953 50px,
+        #e3a953 60px,
+        transparent 60px
+      ),
+      radial-gradient(circle at 30px 5px, #713e16 30px, #eac284 31px);
+    }
+
+    .middle-layer {
+      transform: scale(0.85);
+      top: 72px;
+      animation: rise-1 2s forwards;
+    }
+
+    @keyframes rise-1 {
+      100% { top: 7px; }
+    }
+
+    .top-layer {
+      transform: scale(0.7);
+      top: 144px;
+      animation: rise-2 2s 2s forwards;
+    }
+
+    @keyframes rise-2 {
+      100% { top: 26px; }
+    }
+
+    /* Fixed Candle - no animation */
+    .candle {
+      background: repeating-linear-gradient(
+        45deg,
+        #fd3018 0,
+        #fd3018 5px,
+        #ffa89e 5px,
+        #ffa89e 10px
+      );
+      height: 45px;
+      width: 15px;
+      position: absolute;
+      left: 50%;
+      bottom: 100%;
+      transform: translateX(-50%);
+    }
+
+    .candle::after {
+      content: "";
+      position: absolute;
+      height: 16px;
+      width: 16px;
+      background-color: #ffee54;
+      border-radius: 0 50% 50% 50%;
+      top: -16px;
+      left: 0;
+      transform: rotate(45deg);
+    }
+
+    .bottom-message {
+      font-size: 2.2em;
+      font-weight: bold;
+      color: #000;
+      z-index: 20;
+      margin-top: 40px;
+      text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.7);
+      max-width: 700px;
+      line-height: 1.4;
+    }
+
+    @media (max-width: 480px) {
+      .bottom-message {
+        font-size: 1.6em;
+        padding: 0 10px;
+      }
+
+      .bottom-layer,
+      .middle-layer,
+      .top-layer {
+        width: 180px;
+        height: 60px;
+      }
+
+      .middle-layer { top: 52px; }
+      .top-layer { top: 104px; }
+
+      .candle {
+        height: 35px;
+        width: 10px;
+      }
+
+      .candle::after {
+        height: 12px;
+        width: 12px;
+        top: -12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Heart Background -->
+  <div class="hearts" id="hearts"></div>
+
+  <!-- Cake -->
+  <div class="container">
+    <div class="cake">
+      <div class="top-layer">
+        <div class="candle"></div>
+      </div>
+      <div class="middle-layer"></div>
+      <div class="bottom-layer"></div>
+    </div>
+  </div>
+
+  <!-- Bottom Message -->
+  <div class="bottom-message">
+    Happy Birthday, my handsome man! 😘<br />
+    You're the best thing that ever happened to me 💗.<br />
+    May your year be filled with happiness, success, and endless love from me!
+  </div>
+
+  <!-- Heart Creation Script -->
+  <script>
+    const container = document.getElementById("hearts");
+    for (let i = 0; i < 30; i++) {
+      const heart = document.createElement("div");
+      heart.classList.add("heart");
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.animationDelay = Math.random() * 5 + "s";
+      heart.style.opacity = Math.random();
+      container.appendChild(heart);
+    }
+  </script>
+</body>
+</html>
